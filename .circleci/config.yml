@@ -2,9 +2,6 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs: 
-  aws-cli: circleci/aws-cli@2.1.0
-
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -29,9 +26,14 @@ jobs:
             - project/build
 
   deploy:
-    executor: aws-cli/default
+    docker:
+      - image: amazon/aws-cli:latest
     steps:
       - checkout
+      - run:
+          name: Install libraries
+          command: |
+            yum install -y tar gzip
       - attach_workspace:
           at: ~/
       - run:
