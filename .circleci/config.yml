@@ -40,7 +40,8 @@ jobs:
       - run:
           name: Deploy static files to S3
           command: |
-            aws s3 cp build s3://demo-website-982503247633/ --recursive
+            cd build
+            aws s3 sync . s3://demo-website-982503247633/ --delete --debug
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
