@@ -30,6 +30,10 @@ jobs:
       - image: amazon/aws-cli:latest
     steps:
       - checkout
+      - run:
+          name: Install libraries
+          command: |
+            yum install -y tar gzip
       - attach_workspace:
           at: ~/
       - run:
