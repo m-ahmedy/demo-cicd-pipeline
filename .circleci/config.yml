@@ -27,14 +27,9 @@ jobs:
 
   deploy:
     docker:
-      - image: python:3.7-alpine
+      - image: amazon/aws-cli:latest
     steps:
       - checkout
-      - run:
-          name: Install libraries
-          command: |
-            apk add --update curl
-            pip install awscli
       - attach_workspace:
           at: ~/
       - run:
