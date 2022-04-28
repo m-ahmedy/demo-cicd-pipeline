@@ -2,9 +2,6 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-orbs:
-  slack: circleci/slack@4.9.3
-
 commands:
   install_awscli:
     steps:
@@ -14,12 +11,16 @@ commands:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-  notify_on_failure:
+            aws --version
+  
+  install_ansible:
     steps:
-      - slack/notify:
-          event: fail
-          channel: test-channel
-          template: basic_fail_1
+      - run:
+          name: Install Ansible
+          command: |
+            sudo python get-pip.py
+            sudo python -m pip install ansible
+            ansible --version
 
 jobs:
   say-hello:
@@ -28,36 +29,9 @@ jobs:
     steps:
       - checkout
       - install_awscli
-      - run:
-          name: "Say hello AWSCLI"
-          command: aws --version
-      # - notify_on_failure
+      - install_ansible
 
-  fail:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: exit 1
-      # - notify_on_failure
-
-  # notify_on_success:
-  #   docker:
-  #     - image: cimg/base:stable
-  #   steps:
-  #     - slack/notify:
-  #         event: pass
-  #         channel: test-channel
-  #         template: success_tagged_deploy_1
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
       - say-hello
-      # - notify_on_success:
-      #     requires:
-      #       - say-hello
