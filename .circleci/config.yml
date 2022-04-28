@@ -18,8 +18,8 @@ commands:
       - run:
           name: Install Ansible
           command: |
-            sudo python get-pip.py
-            sudo python -m pip install ansible
+            sudo python3 get-pip.py
+            sudo python3 -m pip install ansible
             ansible --version
 
 jobs:
