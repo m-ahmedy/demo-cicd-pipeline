@@ -30,6 +30,11 @@ jobs:
       - checkout
       - install_awscli
       - install_ansible
+      - run:
+          name: Say Hello
+          command: |
+            aws --version
+            ansible --version
 
 workflows:
   say-hello-workflow:
